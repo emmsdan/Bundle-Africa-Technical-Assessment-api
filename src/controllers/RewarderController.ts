@@ -3,20 +3,27 @@ import csvToJson from "convert-csv-to-json";
 import { objectToCamelCase, priceConfiguration } from "../utils";
 export const GetRewards = async (req: Request, res: Response) => {
   try {
-    const start = Date.now();
+    let totalAmount = 0;
+    let totalValidity = 0;
+    let totalOrderValue = 0;
     const data = csvToJson
       .formatValueByType()
       .fieldDelimiter(",")
       .map((__header: any, value: { OrderValue: string | number }) => {
+        const priceConfig = priceConfiguration(Number(value.OrderValue));
+        totalAmount += priceConfig.price;
+        totalValidity += priceConfig.validity;
+        totalOrderValue += Number(value.OrderValue);
         return objectToCamelCase({
           ...value,
-          ...priceConfiguration(Number(value.OrderValue) + 1),
+          ...priceConfig,
         });
       })
       .parseSubArray("*", ",")
       // @ts-ignore
       .getJsonFromCsv(req.files.file.tempFilePath);
-    const end = Date.now();
-    res.status(200).json({ data, start, end, diff: end - start });
+    res
+      .status(200)
+      .json({ data, meta: { totalValidity, totalAmount, totalOrderValue } });
   } catch (e) {}
 };

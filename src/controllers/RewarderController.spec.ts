@@ -28,6 +28,11 @@ describe("Test GetRewards", () => {
       .attach("file", TestCSVBuffer, "test-csv.csv");
     expect(result.status).toBe(200);
     expect(result.body.data).toStrictEqual(expectedOutput);
+    expect(result.body.meta).toStrictEqual({
+      totalAmount: 100,
+      totalValidity: 1,
+      totalOrderValue: 3100,
+    });
   });
 
   it("Request /reward should return 400", async () => {
