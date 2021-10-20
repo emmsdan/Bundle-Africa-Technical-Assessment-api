@@ -12,11 +12,9 @@ export const fileValidator = (mimetype: string) => {
       next();
       return;
     }
-    return res
-      .status(400)
-      .json({
-        message: `File upload should be ${mimetype} type`,
-        type: file.mimetype,
-      });
+    return res.status(400).json({
+      message: `File upload should be ${mimetype} type`,
+      type: file.mimetype,
+    });
   };
 };
