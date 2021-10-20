@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+// @ts-ignore
 import csvToJson from "convert-csv-to-json";
 import { objectToCamelCase, priceConfiguration } from "../utils";
 export const GetRewards = async (req: Request, res: Response) => {
@@ -25,5 +26,8 @@ export const GetRewards = async (req: Request, res: Response) => {
     res
       .status(200)
       .json({ data, meta: { totalValidity, totalAmount, totalOrderValue } });
-  } catch (e) {}
+  } catch (e) {
+    // pipe to analytics
+    res.status(500).json({ message: "Internal Server Error." });
+  }
 };
