@@ -9,8 +9,7 @@ export const fileValidator = (mimetype: string) => {
     // @ts-ignore
     const file: UploadedFile = req.files.file;
     if (req.files.file && file.mimetype.includes(mimetype)) {
-      next();
-      return;
+      return next();
     }
     return res.status(400).json({
       message: `File upload should be ${mimetype} type`,

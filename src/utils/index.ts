@@ -17,11 +17,14 @@ export const priceConfiguration = (amount: number) => {
   return { validity, price };
 };
 
-export const toCamelCase = (word: string) =>
-  word.replace(/^([A-Z])|[\s-_]+(\w)/g, (__match, p1, p2) => {
+export const toCamelCase = (word: string) => {
+  if (typeof word !== "string") return word;
+
+  return word.replace(/^([A-Z])|[\s-_]+(\w)/g, (__match, p1, p2) => {
     if (p2) return p2.toUpperCase();
     return p1.toLowerCase();
   });
+};
 
 export const objectToCamelCase = (obj: any) => {
   const newObj: { [key: string]: string | number } = {};
